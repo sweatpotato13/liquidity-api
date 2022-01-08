@@ -14,6 +14,9 @@ export default registerAs(
         database: process.env.POSTGRES_DB || "postgres",
         synchronize: process.env.POSTGRES_SYNC === "true",
         logging: true,
-        entities: [__dirname + "/**/**.entity{.ts,.js}"]
+        entities: [__dirname + "/**/**.entity{.ts,.js}"],
+        ssl: {
+            rejectUnauthorized: false,
+        }
     })
 );

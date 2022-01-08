@@ -6,6 +6,6 @@ export class HealthCheckHandler implements IQueryHandler<HealthCheckQuery> {
     constructor() {}
 
     async execute(command: HealthCheckQuery) {
-        return "";
+        return "Hello :)";
     }
 }

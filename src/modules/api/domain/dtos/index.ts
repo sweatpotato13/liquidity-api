@@ -1,3 +1,11 @@
-// import { RegisterHubDto } from "./example.dto";
+import { GetLiquidityRequestDto } from './get-liquidity.request.dto';
 
-// export { RegisterHubDto };
+import { GetLiquidityResponseDto } from './get-liquidity.response.dto';
+
+export {
+    GetLiquidityRequestDto
+}
+
+export {
+    GetLiquidityResponseDto
+}

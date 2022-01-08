@@ -1,13 +1,13 @@
+import { loggerOptions } from "@src/config/modules/winston";
 import { Service } from "typedi";
 import { Logger, createLogger } from "winston";
-import { loggerConfig } from "@config";
 
 @Service()
 export class LoggerService {
     private readonly logger: Logger;
 
     constructor() {
-        this.logger = createLogger(loggerConfig);
+        this.logger = createLogger(loggerOptions);
     }
 
     info(message: string, meta?: Record<string, any>) {

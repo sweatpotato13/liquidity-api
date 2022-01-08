@@ -1,3 +1,7 @@
-// import { DiscardHubCommand } from "./example.command";
+import { AddBotAddressCommand } from "./add-botaddress.command";
+import { RemoveBotAddressCommand } from "./remove-botaddress.command";
 
-// export { DiscardHubCommand };
+export {
+    AddBotAddressCommand,
+    RemoveBotAddressCommand
+}

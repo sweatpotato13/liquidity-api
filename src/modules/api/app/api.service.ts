@@ -6,7 +6,9 @@ import {
     runOnTransactionComplete,
     Transactional
 } from "typeorm-transactional-cls-hooked";
-import { HealthCheckQuery } from "../domain/queries/impl";
+import { AddBotAddressCommand, RemoveBotAddressCommand } from "../domain/commands/impl";
+import { GetLiquidityRequestDto, GetLiquidityResponseDto } from "../domain/dtos";
+import { GetLiquidityQuery, HealthCheckQuery } from "../domain/queries/impl";
 
 @Injectable()
 export class ApiService {
@@ -24,19 +26,45 @@ export class ApiService {
         }
     }
 
-    // @Transactional()
-    // public async discardApi(data: DiscardApiDto): Promise<any> {
-    //     try {
-    //         const result = await this._commandBus.execute(
-    //             new DiscardApiCommand(data)
-    //         );
-    //         runOnTransactionCommit(() => { });
-    //         return result;
-    //     } catch (error) {
-    //         runOnTransactionRollback(() => { });
-    //         throw error;
-    //     } finally {
-    //         runOnTransactionComplete(() => { });
-    //     }
-    // }
+    public async getLiquidity(args: GetLiquidityRequestDto): Promise<GetLiquidityResponseDto> {
+        try {
+            const result = await this._queryBus.execute(new GetLiquidityQuery(args));
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Transactional()
+    public async addBotAddress(address: string): Promise<any> {
+        try {
+            const ret = await this._commandBus.execute(
+                new AddBotAddressCommand(address)
+            );
+            runOnTransactionCommit(() => { });
+            return ret;
+        } catch (error) {
+            runOnTransactionRollback(() => { });
+            throw error;
+        } finally {
+            runOnTransactionComplete(() => { });
+        }
+    }
+
+
+    @Transactional()
+    public async removeBotAddress(address: string): Promise<any> {
+        try {
+            const ret = await this._commandBus.execute(
+                new RemoveBotAddressCommand(address)
+            );
+            runOnTransactionCommit(() => { });
+            return ret;
+        } catch (error) {
+            runOnTransactionRollback(() => { });
+            throw error;
+        } finally {
+            runOnTransactionComplete(() => { });
+        }
+    }
 }

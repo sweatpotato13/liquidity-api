@@ -4,9 +4,8 @@ _config({ path: __dirname + "/../../.env" });
 (process as any).send = process.send || function () {};
 
 import TypeOrmModuleConfig from "./modules/typeorm";
-import { loggerConfig } from "./modules/logger";
 
-export { TypeOrmModuleConfig, loggerConfig };
+export { TypeOrmModuleConfig };
 
 export const config = {
     // Base
