@@ -2,7 +2,7 @@ import { Inject } from "@nestjs/common";
 import { ICommandHandler, CommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Liquidity, Setting } from "@src/shared/entities";
-import { EtheriumService } from "@src/shared/services/etherium/etherium.service";
+import { EthereumService } from "@src/shared/services/ethereum/ethereum.service";
 import { ThegraphService } from "@src/shared/services/thrgraph/thegraph.service";
 import { Repository } from "typeorm";
 import { ParseTransactionDataCommand } from "../impl";
@@ -15,8 +15,8 @@ export class ParseTransactionDataHandler implements ICommandHandler<ParseTransac
         private readonly _liquidityRepo: Repository<Liquidity>,
         @InjectRepository(Setting)
         private readonly _settingRepo: Repository<Setting>,
-        @Inject("EtheriumService")
-        private readonly _etheriumService: EtheriumService,
+        @Inject("EthereumService")
+        private readonly _ethereumService: EthereumService,
         @Inject("ThegraphService")
         private readonly _thegraphService: ThegraphService
     ) { }
@@ -27,7 +27,7 @@ export class ParseTransactionDataHandler implements ICommandHandler<ParseTransac
         let objects = [];
 
         for(const address of addressList){
-            const result = await this._etheriumService.getErc20TransactionsByAddress(address.botAddress);
+            const result = await this._ethereumService.getErc20TransactionsByAddress(address.botAddress);
             const filtered = this.removeDuplicates(result, "tokenSymbol");
             objects = objects.concat(filtered);
         }

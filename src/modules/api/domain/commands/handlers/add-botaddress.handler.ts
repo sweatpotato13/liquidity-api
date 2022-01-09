@@ -1,7 +1,9 @@
 import { ICommandHandler, CommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Setting } from "@src/shared/entities";
-import { ConflictException } from "@src/shared/models/error/http.error";
+import { BadRequestException, ConflictException } from "@src/shared/models/error/http.error";
+import { EthereumService } from "@src/shared/services/ethereum/ethereum.service";
+import { Inject } from "typedi";
 import { Repository } from "typeorm";
 import { AddBotAddressCommand } from "../impl";
 
@@ -9,11 +11,19 @@ import { AddBotAddressCommand } from "../impl";
 export class AddBotAddressHandler implements ICommandHandler<AddBotAddressCommand> {
     constructor(
         @InjectRepository(Setting)
-        private readonly _settingRepo: Repository<Setting>
+        private readonly _settingRepo: Repository<Setting>,
+        @Inject("EthereumService")
+        private readonly _ethereumService: EthereumService,
     ) { }
 
     async execute(command: AddBotAddressCommand): Promise<any> {
         const { data } = command;
+
+        if(!await this._ethereumService.isValidAddress(data)){
+            throw new BadRequestException(`Address not valid`, {
+                context: `AddBotAddressHandler`,
+            });
+        }
 
         const setting = await this._settingRepo.create({
             botAddress: data,

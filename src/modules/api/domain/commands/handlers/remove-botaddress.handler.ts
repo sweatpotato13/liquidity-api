@@ -16,7 +16,7 @@ export class RemoveBotAddressHandler implements ICommandHandler<RemoveBotAddress
         const { data } = command;
 
         const exist = await this._settingRepo.findOne({ botAddress: data });
-        if (exist) {
+        if (!exist) {
             throw new NotFoundException(`Bot doesn't exists`, {
                 context: `RemoveBotAddressCommand`,
             });

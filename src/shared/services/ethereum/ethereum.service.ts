@@ -5,11 +5,15 @@ import { config } from "@src/config";
 import { BadRequestException } from "@src/shared/models/error/http.error";
 
 @Service()
-export class EtheriumService {
+export class EthereumService {
     private readonly web3: Web3;
 
     constructor() {
         this.web3 = new Web3(`https://mainnet.infura.io/v3/${config.infuraProjectId}`);
+    }
+
+    public async isValidAddress(address: string) {
+        return this.web3.utils.isAddress(address);
     }
 
     public async getErc20TransactionsByAddress(address: string, startDate?: string) {
