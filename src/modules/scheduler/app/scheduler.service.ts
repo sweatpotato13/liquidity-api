@@ -16,7 +16,7 @@ export class SchedulerService {
     ) { }
 
     @Transactional()
-    @Cron(CronExpression.EVERY_3_HOURS)
+    @Cron(CronExpression.EVERY_HOUR)
     public async parseTransactionData(): Promise<any> {
         try {
             const ret = await this._commandBus.execute(
