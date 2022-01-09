@@ -21,6 +21,8 @@
     },
     "scripts": {
         "prebuild": "rimraf dist",
+        "prestart:prod": "rimraf dist && yarn build",
+        "web": "yarn start:prod",
         "build": "nest build",
         "prettier": "prettier --write \"src/**/*.ts\"",
         "prestart": "yarn run types",
