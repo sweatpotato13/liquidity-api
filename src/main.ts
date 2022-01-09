@@ -14,7 +14,6 @@ import {
 import { config } from "@config";
 import { BadRequestExceptionFilter } from "./common/filters/bad-request-exception.filter";
 import { errorStream, logger } from "./config/modules/winston";
-import { TimeoutInterceptor } from "./common/interceptors/timeout.interceptor";
 
 initializeTransactionalContext();
 patchTypeORMRepositoryWithBaseRepository();
@@ -27,7 +26,6 @@ async function bootstrap() {
         );
         app.useGlobalPipes(new ValidationPipe());
         app.useGlobalFilters(new BadRequestExceptionFilter());
-        app.useGlobalInterceptors(new TimeoutInterceptor());
         app.use(helmet());
 
         app.use(rTracer.expressMiddleware());

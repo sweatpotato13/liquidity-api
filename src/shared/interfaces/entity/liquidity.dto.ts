@@ -14,11 +14,7 @@ export class LiquidityDto {
 
     @Expose()
     @IsString({ message: "Invalid liquidity" })
-    readonly liquidity: string;
-
-    @Expose()
-    @IsString({ message: "Invalid source" })
-    readonly source: string;
+    readonly liquidity: number;
 
     public static of(params: Partial<LiquidityDto>): LiquidityDto {
         const liquidityDto = new LiquidityDto();

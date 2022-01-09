@@ -12,10 +12,6 @@ import { QueryHandlers } from "./domain/queries/handlers";
 
 @Module({
     imports: [
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule.forFeature(TypeOrmModuleConfig)],
-            useClass: TypeOrmConfigService,
-        }),
         TypeOrmModule.forFeature([Liquidity, Setting]),
         CqrsModule,
     ],

@@ -22,14 +22,9 @@ export class Liquidity {
     pairContract: string;
 
     @Column({
-        name: "liquidity"
+        name: "liquidity",
     })
     liquidity: number;
-
-    @Column({
-        name: "source"
-    })
-    source: string;
 
     @CreateDateColumn({
         name: "created_at",

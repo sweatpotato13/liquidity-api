@@ -8,6 +8,7 @@ import { TypeOrmModuleConfig } from "@config";
 import { ApiModule } from "./modules/api/api.module";
 import { BadRequestExceptionFilter } from "./common/filters/bad-request-exception.filter";
 import { TypeOrmConfigService } from "./config/modules/typeorm/typeorm.config.service";
+import { SchedulerModule } from "./modules/scheduler/scheduler.module";
 
 @Module({
     imports: [
@@ -16,7 +17,8 @@ import { TypeOrmConfigService } from "./config/modules/typeorm/typeorm.config.se
             useClass: TypeOrmConfigService
         }),
         /** ------------------ */
-        ApiModule
+        ApiModule,
+        SchedulerModule
     ],
     controllers: [],
     providers: [
