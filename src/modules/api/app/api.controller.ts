@@ -28,7 +28,6 @@ export class ApiController {
         }
     }
 
-
     @Post("add/:address/")
     async addBotAddress(@Param("address") address: string): Promise<any> {
         try {

@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Liquidity } from "@src/shared/entities";
-import { LessThanOrEqual, Repository } from "typeorm";
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { GetLiquidityResponseDto } from "../../dtos";
 import { GetLiquidityQuery } from "../impl";
 
@@ -14,14 +14,24 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
 
     async execute(command: GetLiquidityQuery) {
         const { args } = command;
-        const { liquidity } = args;
+        const { liquidity, startDate } = args;
 
         const result = new GetLiquidityResponseDto();
         result.data = [];
 
+        let liquidityBase = 1000000000;
+        let start = new Date("2021-01-01").toISOString();
+        if(liquidity){
+            liquidityBase = liquidity;
+        }
+        if(startDate){
+            start = new Date(startDate).toISOString();
+        }
+
         const data: Liquidity[] = await this._liquidityRepo.find({
             where: {
-                liquidity: LessThanOrEqual(liquidity)
+                liquidity: LessThanOrEqual(liquidityBase),
+                updatedAt: MoreThanOrEqual(start)
             }
         });
 
@@ -34,6 +44,8 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
             result.data.push(object);
         }
 
-        return result;
+        result.data.sort((a, b) => a.liquidity < b.liquidity ? -1 : a.liquidity > b.liquidity ? 1 : 0)
+
+        return result.data;
     }
 }
