@@ -1,5 +1,5 @@
 import { plainToClass } from "class-transformer";
-import { Entity, Column, PrimaryColumn, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { LiquidityDto } from "../interfaces/entity";
 
 @Entity({
@@ -32,7 +32,7 @@ export class Liquidity {
     })
     createdAt: Date;
 
-    @CreateDateColumn({
+    @UpdateDateColumn({
         name: "updated_at",
         type: "timestamp"
     })
