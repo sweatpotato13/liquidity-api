@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
+import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Liquidity, Setting } from "@src/shared/entities";
 import { EthereumService } from "@src/shared/services/ethereum/ethereum.service";
@@ -10,6 +11,7 @@ import { CommandHandlers } from "./domain/commands/handlers";
 
 @Module({
     imports: [
+        ScheduleModule.forRoot(),
         TypeOrmModule.forFeature([Liquidity, Setting]),
         CqrsModule,
     ],
