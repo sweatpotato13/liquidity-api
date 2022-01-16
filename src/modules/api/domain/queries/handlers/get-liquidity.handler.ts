@@ -39,7 +39,8 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
             const object = {
                 symbol: a.symbol,
                 liquidity: a.liquidity,
-                pairContract: a.pairContract
+                pairContract: a.pairContract,
+                updateAt: a.updatedAt
             };
             result.data.push(object);
         }
