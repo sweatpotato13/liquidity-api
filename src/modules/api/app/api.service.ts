@@ -14,7 +14,7 @@ import {
     GetLiquidityRequestDto,
     GetLiquidityResponseDto
 } from "../domain/dtos";
-import { GetLiquidityQuery, HealthCheckQuery } from "../domain/queries/impl";
+import { GetLiquidityFromUniswapQuery, GetLiquidityQuery, HealthCheckQuery } from "../domain/queries/impl";
 
 @Injectable()
 export class ApiService {
@@ -38,6 +38,19 @@ export class ApiService {
         try {
             const result = await this._queryBus.execute(
                 new GetLiquidityQuery(args)
+            );
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async getLiquidityFromUniswap(
+        args: GetLiquidityRequestDto
+    ): Promise<GetLiquidityResponseDto> {
+        try {
+            const result = await this._queryBus.execute(
+                new GetLiquidityFromUniswapQuery(args)
             );
             return result;
         } catch (error) {

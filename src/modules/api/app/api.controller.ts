@@ -39,6 +39,18 @@ export class ApiController {
         }
     }
 
+    @Get("liquidity-uniswap")
+    async getLiquidityFromUniswap(
+        @Query() args: GetLiquidityRequestDto
+    ): Promise<GetLiquidityResponseDto> {
+        try {
+            const result = await this._service.getLiquidityFromUniswap(args);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @Post("add/:address/")
     async addBotAddress(@Param("address") address: string): Promise<any> {
         try {

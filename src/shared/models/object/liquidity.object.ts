@@ -10,6 +10,9 @@ export class LiquidityObject {
     @IsString()
     pairContract: string;
 
+    @IsString()
+    updatedAt: Date;
+
     public static of(params: Partial<LiquidityObject>): LiquidityObject {
         const liquidityObject = new LiquidityObject();
         Object.assign(liquidityObject, params);

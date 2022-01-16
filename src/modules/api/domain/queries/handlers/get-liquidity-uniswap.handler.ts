@@ -1,18 +1,18 @@
 import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Liquidity } from "@src/shared/entities";
+import { Liquidity, LiquidityUniswap } from "@src/shared/entities";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { GetLiquidityResponseDto } from "../../dtos";
-import { GetLiquidityQuery } from "../impl";
+import { GetLiquidityFromUniswapQuery } from "../impl";
 
-@QueryHandler(GetLiquidityQuery)
-export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
+@QueryHandler(GetLiquidityFromUniswapQuery)
+export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidityFromUniswapQuery> {
     constructor(
-        @InjectRepository(Liquidity)
-        private readonly _liquidityRepo: Repository<Liquidity>
+        @InjectRepository(LiquidityUniswap)
+        private readonly _liquidityUniswapRepo: Repository<LiquidityUniswap>
     ) {}
 
-    async execute(command: GetLiquidityQuery) {
+    async execute(command: GetLiquidityFromUniswapQuery) {
         const { args } = command;
         const { liquidity, startDate } = args;
 
@@ -28,7 +28,7 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
             start = new Date(startDate).toISOString();
         }
 
-        const data: Liquidity[] = await this._liquidityRepo.find({
+        const data: LiquidityUniswap[] = await this._liquidityUniswapRepo.find({
             where: {
                 liquidity: LessThanOrEqual(liquidityBase),
                 updatedAt: MoreThanOrEqual(start)
