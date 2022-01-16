@@ -4,7 +4,7 @@ import {
     Column,
     PrimaryColumn,
     CreateDateColumn,
-    PrimaryGeneratedColumn
+    UpdateDateColumn,
 } from "typeorm";
 import { LiquidityDto } from "../interfaces/entity";
 
@@ -38,7 +38,7 @@ export class Liquidity {
     })
     createdAt: Date;
 
-    @CreateDateColumn({
+    @UpdateDateColumn({
         name: "updated_at",
         type: "timestamp"
     })
