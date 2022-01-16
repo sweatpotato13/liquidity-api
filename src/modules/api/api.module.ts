@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Liquidity, Setting } from "@src/shared/entities";
+import { Liquidity, LiquidityUniswap, Setting } from "@src/shared/entities";
 import { EthereumService } from "@src/shared/services/ethereum/ethereum.service";
 import { ApiController } from "./app/api.controller";
 import { ApiService } from "./app/api.service";
@@ -10,8 +10,8 @@ import { QueryHandlers } from "./domain/queries/handlers";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Liquidity, Setting]),
-        CqrsModule,
+        TypeOrmModule.forFeature([Liquidity, Setting, LiquidityUniswap]),
+        CqrsModule
     ],
     providers: [
         { provide: "ApiService", useClass: ApiService },
@@ -22,5 +22,5 @@ import { QueryHandlers } from "./domain/queries/handlers";
     controllers: [ApiController]
 })
 export class ApiModule {
-    configure() { }
+    configure() {}
 }

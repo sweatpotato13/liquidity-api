@@ -18,6 +18,26 @@ export class ThegraphService {
         );
     }
 
+    public async getPairCount() {
+        return (
+            await this.req<any, any>({
+                endpoint: config.uniswapGraphqlEndpoint,
+                query: gql`
+                    query GetPairCount {
+                        uniswapFactories {
+                          pairCount
+                          totalVolumeUSD
+                          totalLiquidityUSD
+                        }
+                      }
+                `,
+            })
+        ).uniswapFactories.map(value => {
+            return value.pairCount;
+        });
+    }
+
+
     public async getPair(token0: string, token1: string) {
         return (
             await this.req<any, any>({
@@ -32,6 +52,37 @@ export class ThegraphService {
                 variables: {
                     token0: token0,
                     token1: token1,
+                },
+            })
+        ).pairs.map(value => {
+            return value;
+        });
+    }
+
+    public async getAllPairs(skip: number) {
+        return (
+            await this.req<any, any>({
+                endpoint: config.uniswapGraphqlEndpoint,
+                query: gql`
+                    query GetAllPairs($skip: Int!) {
+                        pairs(where:{txCount_gt: 100},first: 1000, skip: $skip) {
+                          id,
+                         token0 {
+                           id,
+                           symbol
+                         },
+                         token1 {
+                           id,
+                           symbol
+                         },
+                         reserve0,
+                         reserve1,
+                         txCount
+                        }
+                      }
+                `,
+                variables: {
+                    skip: skip,
                 },
             })
         ).pairs.map(value => {

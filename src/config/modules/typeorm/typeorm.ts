@@ -16,7 +16,7 @@ export default registerAs(
         logging: true,
         entities: [__dirname + "/**/**.entity{.ts,.js}"],
         ssl: {
-            rejectUnauthorized: false,
+            rejectUnauthorized: false
         }
     })
 );

@@ -1,5 +1,5 @@
 import { ICommand } from "@nestjs/cqrs";
 
-export class ParseTransactionDataCommand implements ICommand {
+export class ParseUniswapDataCommand implements ICommand {
     constructor() {}
 }

@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Liquidity, Setting } from "@src/shared/entities";
+import { Liquidity, LiquidityUniswap, Setting } from "@src/shared/entities";
 import { EthereumService } from "@src/shared/services/ethereum/ethereum.service";
 import { ThegraphService } from "@src/shared/services/thrgraph/thegraph.service";
 import { SchedulerController } from "./app/scheduler.controller";
@@ -10,8 +10,8 @@ import { CommandHandlers } from "./domain/commands/handlers";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Liquidity, Setting]),
-        CqrsModule,
+        TypeOrmModule.forFeature([Liquidity, Setting, LiquidityUniswap]),
+        CqrsModule
     ],
     providers: [
         { provide: "SchedulerService", useClass: SchedulerService },
@@ -22,5 +22,5 @@ import { CommandHandlers } from "./domain/commands/handlers";
     controllers: [SchedulerController]
 })
 export class SchedulerModule {
-    configure() { }
+    configure() {}
 }

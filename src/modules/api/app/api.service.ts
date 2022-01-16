@@ -6,8 +6,14 @@ import {
     runOnTransactionComplete,
     Transactional
 } from "typeorm-transactional-cls-hooked";
-import { AddBotAddressCommand, RemoveBotAddressCommand } from "../domain/commands/impl";
-import { GetLiquidityRequestDto, GetLiquidityResponseDto } from "../domain/dtos";
+import {
+    AddBotAddressCommand,
+    RemoveBotAddressCommand
+} from "../domain/commands/impl";
+import {
+    GetLiquidityRequestDto,
+    GetLiquidityResponseDto
+} from "../domain/dtos";
 import { GetLiquidityQuery, HealthCheckQuery } from "../domain/queries/impl";
 
 @Injectable()
@@ -15,7 +21,7 @@ export class ApiService {
     constructor(
         private readonly _commandBus: CommandBus,
         private readonly _queryBus: QueryBus
-    ) { }
+    ) {}
 
     public async healthCheck(): Promise<any> {
         try {
@@ -26,9 +32,13 @@ export class ApiService {
         }
     }
 
-    public async getLiquidity(args: GetLiquidityRequestDto): Promise<GetLiquidityResponseDto> {
+    public async getLiquidity(
+        args: GetLiquidityRequestDto
+    ): Promise<GetLiquidityResponseDto> {
         try {
-            const result = await this._queryBus.execute(new GetLiquidityQuery(args));
+            const result = await this._queryBus.execute(
+                new GetLiquidityQuery(args)
+            );
             return result;
         } catch (error) {
             throw error;
@@ -41,16 +51,15 @@ export class ApiService {
             const ret = await this._commandBus.execute(
                 new AddBotAddressCommand(address)
             );
-            runOnTransactionCommit(() => { });
+            runOnTransactionCommit(() => {});
             return ret;
         } catch (error) {
-            runOnTransactionRollback(() => { });
+            runOnTransactionRollback(() => {});
             throw error;
         } finally {
-            runOnTransactionComplete(() => { });
+            runOnTransactionComplete(() => {});
         }
     }
-
 
     @Transactional()
     public async removeBotAddress(address: string): Promise<any> {
@@ -58,13 +67,13 @@ export class ApiService {
             const ret = await this._commandBus.execute(
                 new RemoveBotAddressCommand(address)
             );
-            runOnTransactionCommit(() => { });
+            runOnTransactionCommit(() => {});
             return ret;
         } catch (error) {
-            runOnTransactionRollback(() => { });
+            runOnTransactionRollback(() => {});
             throw error;
         } finally {
-            runOnTransactionComplete(() => { });
+            runOnTransactionComplete(() => {});
         }
     }
 }

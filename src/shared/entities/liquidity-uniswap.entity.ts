@@ -1,26 +1,15 @@
 import { plainToClass } from "class-transformer";
-import {
-    Entity,
-    Column,
-    PrimaryColumn,
-    CreateDateColumn,
-    PrimaryGeneratedColumn
-} from "typeorm";
+import { Entity, Column, PrimaryColumn, CreateDateColumn } from "typeorm";
 import { LiquidityDto } from "../interfaces/entity";
 
 @Entity({
-    name: "liquidity"
+    name: "liquidity_uniswap"
 })
-export class Liquidity {
+export class LiquidityUniswap {
     @PrimaryColumn({
         name: "symbol"
     })
     symbol: string;
-
-    @Column({
-        name: "token_contract"
-    })
-    tokenContract: string;
 
     @Column({
         name: "pair_contract"
@@ -48,11 +37,11 @@ export class Liquidity {
         return plainToClass(LiquidityDto, this);
     }
 
-    public static of(params: Partial<Liquidity>): Liquidity {
-        const liquidity = new Liquidity();
+    public static of(params: Partial<LiquidityUniswap>): LiquidityUniswap {
+        const liquidityuniswap = new LiquidityUniswap();
 
-        Object.assign(liquidity, params);
+        Object.assign(liquidityuniswap, params);
 
-        return liquidity;
+        return liquidityuniswap;
     }
 }

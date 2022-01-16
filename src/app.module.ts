@@ -33,5 +33,5 @@ import { SchedulerModule } from "./modules/scheduler/scheduler.module";
     ]
 })
 export class AppModule {
-    constructor(private connection: Connection) { }
+    constructor(private connection: Connection) {}
 }

@@ -8,8 +8,8 @@ export class LiquidityObject {
     liquidity: number;
 
     @IsString()
-    pairContract: string
-    
+    pairContract: string;
+
     public static of(params: Partial<LiquidityObject>): LiquidityObject {
         const liquidityObject = new LiquidityObject();
         Object.assign(liquidityObject, params);

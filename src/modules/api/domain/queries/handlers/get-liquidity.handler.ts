@@ -10,7 +10,7 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
     constructor(
         @InjectRepository(Liquidity)
         private readonly _liquidityRepo: Repository<Liquidity>
-    ) { }
+    ) {}
 
     async execute(command: GetLiquidityQuery) {
         const { args } = command;
@@ -21,10 +21,10 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
 
         let liquidityBase = 1000000000;
         let start = new Date("2021-01-01").toISOString();
-        if(liquidity){
+        if (liquidity) {
             liquidityBase = liquidity;
         }
-        if(startDate){
+        if (startDate) {
             start = new Date(startDate).toISOString();
         }
 
@@ -40,11 +40,13 @@ export class GetLiquidityHandler implements IQueryHandler<GetLiquidityQuery> {
                 symbol: a.symbol,
                 liquidity: a.liquidity,
                 pairContract: a.pairContract
-            }
+            };
             result.data.push(object);
         }
 
-        result.data.sort((a, b) => a.liquidity < b.liquidity ? -1 : a.liquidity > b.liquidity ? 1 : 0)
+        result.data.sort((a, b) =>
+            a.liquidity < b.liquidity ? -1 : a.liquidity > b.liquidity ? 1 : 0
+        );
 
         return result.data;
     }

@@ -1,5 +1,3 @@
-import { LiquidityObject } from './liquidity.object';
+import { LiquidityObject } from "./liquidity.object";
 
-export {
-    LiquidityObject
-}
+export { LiquidityObject };

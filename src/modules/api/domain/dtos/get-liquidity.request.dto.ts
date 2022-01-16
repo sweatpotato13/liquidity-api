@@ -11,7 +11,9 @@ export class GetLiquidityRequestDto {
     @IsOptional()
     startDate: string;
 
-    public static of(params: Partial<GetLiquidityRequestDto>): GetLiquidityRequestDto {
+    public static of(
+        params: Partial<GetLiquidityRequestDto>
+    ): GetLiquidityRequestDto {
         const getLiquidityRequestDto = new GetLiquidityRequestDto();
         Object.assign(getLiquidityRequestDto, params);
         return getLiquidityRequestDto;

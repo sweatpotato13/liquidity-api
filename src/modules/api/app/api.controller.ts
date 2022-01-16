@@ -1,10 +1,21 @@
-import { Body, Controller, Get, Inject, Param, Post, Query } from "@nestjs/common";
-import { GetLiquidityRequestDto, GetLiquidityResponseDto } from "../domain/dtos";
+import {
+    Body,
+    Controller,
+    Get,
+    Inject,
+    Param,
+    Post,
+    Query
+} from "@nestjs/common";
+import {
+    GetLiquidityRequestDto,
+    GetLiquidityResponseDto
+} from "../domain/dtos";
 import { ApiService } from "./api.service";
 
 @Controller()
 export class ApiController {
-    constructor(@Inject("ApiService") private readonly _service: ApiService) { }
+    constructor(@Inject("ApiService") private readonly _service: ApiService) {}
 
     @Get()
     async healthCheck(): Promise<any> {
