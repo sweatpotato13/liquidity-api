@@ -1,6 +1,8 @@
 import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Liquidity, LiquidityUniswap } from "@src/shared/entities";
+import { EthereumService } from "@src/shared/services/ethereum/ethereum.service";
+import { Inject } from "typedi";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { GetLiquidityResponseDto } from "../../dtos";
 import { GetLiquidityFromUniswapQuery } from "../impl";
@@ -9,8 +11,10 @@ import { GetLiquidityFromUniswapQuery } from "../impl";
 export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidityFromUniswapQuery> {
     constructor(
         @InjectRepository(LiquidityUniswap)
-        private readonly _liquidityUniswapRepo: Repository<LiquidityUniswap>
-    ) {}
+        private readonly _liquidityUniswapRepo: Repository<LiquidityUniswap>,
+        @Inject("EthereumService")
+        private readonly _ethereumService: EthereumService
+    ) { }
 
     async execute(command: GetLiquidityFromUniswapQuery) {
         const { args } = command;
@@ -35,6 +39,7 @@ export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidit
             }
         });
 
+        const baseDate = this.getDateAgo(7);
         for (const a of data) {
             const object = {
                 symbol: a.symbol,
@@ -42,7 +47,10 @@ export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidit
                 pairContract: a.pairContract,
                 updatedAt: a.updatedAt
             };
-            result.data.push(object);
+            const trxs = await this._ethereumService.getErc20TransactionsByAddress(a.pairContract, baseDate);
+            if (trxs.length != 0) {
+                result.data.push(object);
+            }
         }
 
         result.data.sort((a, b) =>
@@ -50,5 +58,15 @@ export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidit
         );
 
         return result.data;
+    }
+
+    getDateAgo(ago: number) {
+        const date = new Date();
+        date.setDate(date.getDate() - ago);
+        const year = date.getFullYear();
+        const month = ("0" + (1 + date.getMonth())).slice(-2);
+        const day = ("0" + date.getDate()).slice(-2);
+
+        return `${year}-${month}-${day}`;
     }
 }
