@@ -15,6 +15,10 @@ export class LiquidityUniswapDto {
     @IsString({ message: "Invalid liquidity" })
     readonly liquidity: number;
 
+    @Expose()
+    @IsString({ message: "Invalid latestTrxs" })
+    readonly latestTrxs: number;
+
     public static of(
         params: Partial<LiquidityUniswapDto>
     ): LiquidityUniswapDto {

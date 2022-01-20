@@ -21,6 +21,12 @@ export class LiquidityUniswap {
     })
     liquidity: number;
 
+    @Column({
+        name: "latest_trxs",
+        default: 0
+    })
+    latestTrxs: number;
+
     @CreateDateColumn({
         name: "created_at",
         type: "timestamp"
