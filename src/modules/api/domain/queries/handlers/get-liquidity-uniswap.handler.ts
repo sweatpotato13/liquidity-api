@@ -41,7 +41,8 @@ export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidit
                 symbol: a.symbol,
                 liquidity: a.liquidity,
                 pairContract: a.pairContract,
-                updatedAt: a.updatedAt
+                updatedAt: a.updatedAt,
+                latestTrxs: a.latestTrxs
             };
             result.data.push(object);
         }
