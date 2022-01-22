@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Liquidity, LiquidityUniswap } from "@src/shared/entities";
+import { LiquidityUniswap } from "@src/shared/entities";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { GetLiquidityResponseDto } from "../../dtos";
 import { GetLiquidityFromUniswapQuery } from "../impl";
@@ -9,8 +9,8 @@ import { GetLiquidityFromUniswapQuery } from "../impl";
 export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidityFromUniswapQuery> {
     constructor(
         @InjectRepository(LiquidityUniswap)
-        private readonly _liquidityUniswapRepo: Repository<LiquidityUniswap>
-    ) {}
+        private readonly _liquidityUniswapRepo: Repository<LiquidityUniswap>,
+    ) { }
 
     async execute(command: GetLiquidityFromUniswapQuery) {
         const { args } = command;
@@ -31,7 +31,8 @@ export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidit
         const data: LiquidityUniswap[] = await this._liquidityUniswapRepo.find({
             where: {
                 liquidity: LessThanOrEqual(liquidityBase),
-                updatedAt: MoreThanOrEqual(start)
+                updatedAt: MoreThanOrEqual(start),
+                latestTrxs: MoreThanOrEqual(1)
             }
         });
 
@@ -40,7 +41,8 @@ export class GetLiquidityFromUniswapHandler implements IQueryHandler<GetLiquidit
                 symbol: a.symbol,
                 liquidity: a.liquidity,
                 pairContract: a.pairContract,
-                updatedAt: a.updatedAt
+                updatedAt: a.updatedAt,
+                latestTrxs: a.latestTrxs
             };
             result.data.push(object);
         }

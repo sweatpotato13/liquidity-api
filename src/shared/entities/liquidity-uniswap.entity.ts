@@ -1,5 +1,5 @@
 import { plainToClass } from "class-transformer";
-import { Entity, Column, PrimaryColumn, CreateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { LiquidityDto } from "../interfaces/entity";
 
 @Entity({
@@ -21,13 +21,19 @@ export class LiquidityUniswap {
     })
     liquidity: number;
 
+    @Column({
+        name: "latest_trxs",
+        default: 0
+    })
+    latestTrxs: number;
+
     @CreateDateColumn({
         name: "created_at",
         type: "timestamp"
     })
     createdAt: Date;
 
-    @CreateDateColumn({
+    @UpdateDateColumn({
         name: "updated_at",
         type: "timestamp"
     })
