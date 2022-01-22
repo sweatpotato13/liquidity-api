@@ -8,6 +8,10 @@ export class LiquidityDto {
     readonly symbol: string;
 
     @Expose()
+    @IsString({ message: "Invalid symbol" })
+    readonly baseTokenSymbol: string;
+
+    @Expose()
     @IsString({ message: "Invalid tokenContract" })
     readonly tokenContract: string;
 

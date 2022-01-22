@@ -18,6 +18,12 @@ export class Liquidity {
     symbol: string;
 
     @Column({
+        name: "base_token_symbol",
+        default: "WETH"
+    })
+    baseTokenSymbol: string;
+
+    @Column({
         name: "token_contract"
     })
     tokenContract: string;

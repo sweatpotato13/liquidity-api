@@ -21,10 +21,12 @@ export class ParseTransactionDataHandler
         private readonly _ethereumService: EthereumService,
         @Inject("ThegraphService")
         private readonly _thegraphService: ThegraphService
-    ) {}
+    ) { }
 
     async execute(command: ParseTransactionDataCommand): Promise<any> {
-        const wethAddresss = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+        const wethAddress = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+        const usdcAddress =
+            "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
         const addressList = await this._settingRepo.find({});
         let objects = [];
 
@@ -47,38 +49,77 @@ export class ParseTransactionDataHandler
         console.log(`total ${unique.length} pairs`);
 
         for (const e of unique) {
-            const pairId = await this._thegraphService.getPair(
+            // WETH Pair
+            const wethPairId = await this._thegraphService.getPair(
                 e.contractAddress,
-                wethAddresss
+                wethAddress
             );
-            if (pairId.length == 0) {
+            if (wethPairId.length == 0) {
                 continue;
             }
 
-            const liquidity = await this._thegraphService.getLiquidity(
-                pairId[0].id
+            const wethLiquidity = await this._thegraphService.getLiquidity(
+                wethPairId[0].id
             );
 
-            const isExist = await this._liquidityRepo.findOne({
-                symbol: e.tokenSymbol
+            const isExistw = await this._liquidityRepo.findOne({
+                symbol: e.tokenSymbol,
+                baseTokenSymbol: "WETH",
             });
-            if (isExist) {
-                isExist.liquidity = Math.round(
-                    parseFloat(liquidity.reserve1) * ethToUsd.USD * 2
+            if (isExistw) {
+                isExistw.liquidity = Math.round(
+                    parseFloat(wethLiquidity.reserve1) * ethToUsd.USD * 2
                 );
-                await this._liquidityRepo.save(isExist);
+                await this._liquidityRepo.save(isExistw);
             } else {
                 const object = await this._liquidityRepo.create({
                     symbol: e.tokenSymbol,
                     tokenContract: e.contractAddress,
-                    pairContract: pairId[0].id,
+                    pairContract: wethPairId[0].id,
                     liquidity: Math.round(
-                        parseFloat(liquidity.reserve1) * ethToUsd.USD * 2
-                    )
+                        parseFloat(wethLiquidity.reserve1) * ethToUsd.USD * 2
+                    ),
+                    baseTokenSymbol: "WETH"
                 });
 
                 await this._liquidityRepo.save(object);
             }
+            // USDC Pair
+            const usdcPairId = await this._thegraphService.getPair(
+                e.contractAddress,
+                usdcAddress
+            );
+            if (usdcPairId.length == 0) {
+                continue;
+            }
+
+            const usdcLiquidity = await this._thegraphService.getLiquidity(
+                usdcPairId[0].id
+            );
+
+            const isExistu = await this._liquidityRepo.findOne({
+                symbol: e.tokenSymbol,
+                baseTokenSymbol: "USDC",
+            });
+            if (isExistu) {
+                isExistu.liquidity = Math.round(
+                    parseFloat(usdcLiquidity.reserve1) * 2
+                );
+                await this._liquidityRepo.save(isExistu);
+            } else {
+                const object = await this._liquidityRepo.create({
+                    symbol: e.tokenSymbol,
+                    tokenContract: e.contractAddress,
+                    pairContract: usdcPairId[0].id,
+                    liquidity: Math.round(
+                        parseFloat(usdcLiquidity.reserve1) * 2
+                    ),
+                    baseTokenSymbol: "USDC"
+                });
+
+                await this._liquidityRepo.save(object);
+            }
+
         }
         return "Success";
     }
