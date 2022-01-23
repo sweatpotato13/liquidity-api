@@ -1,6 +1,6 @@
 import { plainToClass } from "class-transformer";
 import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { LiquidityDto } from "../interfaces/entity";
+import { LiquidityUniswapDto } from "../interfaces/entity";
 
 @Entity({
     name: "liquidity_uniswap"
@@ -40,7 +40,7 @@ export class LiquidityUniswap {
     updatedAt: Date;
 
     toDto() {
-        return plainToClass(LiquidityDto, this);
+        return plainToClass(LiquidityUniswapDto, this);
     }
 
     public static of(params: Partial<LiquidityUniswap>): LiquidityUniswap {
