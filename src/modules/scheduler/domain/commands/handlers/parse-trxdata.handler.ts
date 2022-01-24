@@ -27,6 +27,8 @@ export class ParseTransactionDataHandler
         const wethAddress = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
         const usdcAddress =
             "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+        const usdtAddress =
+            "0xdac17f958d2ee523a2206206994597c13d831ec7"
         const addressList = await this._settingRepo.find({});
         let objects = [];
 
@@ -119,7 +121,41 @@ export class ParseTransactionDataHandler
 
                 await this._liquidityRepo.save(object);
             }
+            // USDT Pair
+            const usdtPairId = await this._thegraphService.getPair(
+                e.contractAddress,
+                usdtAddress
+            );
+            if (usdtPairId.length == 0) {
+                continue;
+            }
 
+            const usdtLiquidity = await this._thegraphService.getLiquidity(
+                usdtPairId[0].id
+            );
+
+            const isExistt = await this._liquidityRepo.findOne({
+                symbol: e.tokenSymbol,
+                baseTokenSymbol: "USDT",
+            });
+            if (isExistt) {
+                isExistt.liquidity = Math.round(
+                    parseFloat(usdtLiquidity.reserve1) * 2
+                );
+                await this._liquidityRepo.save(isExistt);
+            } else {
+                const object = await this._liquidityRepo.create({
+                    symbol: e.tokenSymbol,
+                    tokenContract: e.contractAddress,
+                    pairContract: usdtPairId[0].id,
+                    liquidity: Math.round(
+                        parseFloat(usdtLiquidity.reserve1) * 2
+                    ),
+                    baseTokenSymbol: "USDT"
+                });
+
+                await this._liquidityRepo.save(object);
+            }
         }
         return "Success";
     }
